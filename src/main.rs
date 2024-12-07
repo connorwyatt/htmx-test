@@ -1,4 +1,4 @@
-use askama::Template;
+use askama_axum::Template;
 use chrono::Utc;
 use std::net::SocketAddr;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -35,32 +35,13 @@ fn router() -> Router {
 }
 
 async fn index() -> impl IntoResponse {
-    let template = IndexTemplate {
+    IndexTemplate {
         date: Utc::now().to_rfc3339(),
-    };
-    HtmlTemplate(template)
+    }
 }
 
 #[derive(Template)]
 #[template(path = "index.html")]
 struct IndexTemplate {
     date: String,
-}
-
-struct HtmlTemplate<T>(T);
-
-impl<T> IntoResponse for HtmlTemplate<T>
-where
-    T: Template,
-{
-    fn into_response(self) -> Response {
-        match self.0.render() {
-            Ok(html) => Html(html).into_response(),
-            Err(err) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
-                format!("Failed to render template. Error: {err}"),
-            )
-                .into_response(),
-        }
-    }
 }
