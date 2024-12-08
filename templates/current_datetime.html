@@ -1,0 +1,7 @@
+<div id="current_datetime" hx-swap="outerHTML" class="space-y-2">
+    <p>The current date is {{ datetime }}.</p>
+
+    <button
+        class="rounded-md bg-sky-500 hover:bg-sky-400 px-8 py-1 shadow-md shadow-sky-500/50 hover:shadow-sky-400/50 transition"
+        hx-get="/current_datetime" hx-target="#current_datetime">Update</button>
+</div>

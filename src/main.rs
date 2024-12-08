@@ -3,12 +3,7 @@ use chrono::Utc;
 use std::net::SocketAddr;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use axum::{
-    http::StatusCode,
-    response::{Html, IntoResponse, Response},
-    routing::get,
-    Router,
-};
+use axum::{response::IntoResponse, routing::get, Router};
 use tokio::net::TcpListener;
 use tower_http::services::ServeDir;
 
@@ -31,17 +26,30 @@ fn router() -> Router {
     let serve_dir = ServeDir::new("assets");
     Router::new()
         .route("/", get(index))
+        .route("/current_datetime", get(current_datetime))
         .fallback_service(serve_dir)
 }
 
 async fn index() -> impl IntoResponse {
     IndexTemplate {
-        date: Utc::now().to_rfc3339(),
+        datetime: Utc::now().format("%Y-%m-%d %H:%M:%S").to_string(),
+    }
+}
+
+async fn current_datetime() -> impl IntoResponse {
+    CurrentDateTimeTemplate {
+        datetime: Utc::now().format("%Y-%m-%d %H:%M:%S").to_string(),
     }
 }
 
 #[derive(Template)]
 #[template(path = "index.html")]
 struct IndexTemplate {
-    date: String,
+    datetime: String,
+}
+
+#[derive(Template)]
+#[template(path = "current_datetime.html")]
+struct CurrentDateTimeTemplate {
+    datetime: String,
 }
