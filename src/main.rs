@@ -1,5 +1,5 @@
 use askama_axum::Template;
-use chrono::Utc;
+use chrono::{NaiveDate, Utc};
 use std::net::SocketAddr;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -28,12 +28,21 @@ fn router() -> Router {
         .route("/", get(index))
         .route("/current_datetime", get(current_datetime))
         .route("/current_datetime_block", get(current_datetime_block))
+        .route("/people_list", get(people_list))
         .fallback_service(serve_dir)
 }
+
+// Home
 
 async fn index() -> impl IntoResponse {
     IndexTemplate
 }
+
+#[derive(Template)]
+#[template(path = "index.html")]
+struct IndexTemplate;
+
+// Current Datetime
 
 async fn current_datetime() -> impl IntoResponse {
     CurrentDateTimeTemplate {
@@ -48,17 +57,32 @@ async fn current_datetime_block() -> impl IntoResponse {
 }
 
 #[derive(Template)]
-#[template(path = "index.html")]
-struct IndexTemplate;
-
-#[derive(Template)]
 #[template(path = "current_datetime.html")]
 struct CurrentDateTimeTemplate {
     datetime: String,
-} 
+}
 
 #[derive(Template)]
 #[template(path = "current_datetime_block.html")]
 struct CurrentDateTimeBlockTemplate {
     datetime: String,
-} 
+}
+
+// People List
+
+struct Person {
+    name: &'static str,
+    date_of_birth: NaiveDate,
+    nationality: &'static str,
+}
+
+async fn people_list() -> impl IntoResponse {
+    PeopleListTemplate { people: Vec::new() }
+}
+
+#[derive(Template)]
+#[template(path = "people_list.html")]
+struct PeopleListTemplate {
+    // TODO: Use a Person struct here.
+    people: Vec<Person>,
+}
