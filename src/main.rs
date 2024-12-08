@@ -27,13 +27,12 @@ fn router() -> Router {
     Router::new()
         .route("/", get(index))
         .route("/current_datetime", get(current_datetime))
+        .route("/current_datetime_block", get(current_datetime_block))
         .fallback_service(serve_dir)
 }
 
 async fn index() -> impl IntoResponse {
-    IndexTemplate {
-        datetime: Utc::now().format("%Y-%m-%d %H:%M:%S").to_string(),
-    }
+    IndexTemplate
 }
 
 async fn current_datetime() -> impl IntoResponse {
@@ -42,14 +41,24 @@ async fn current_datetime() -> impl IntoResponse {
     }
 }
 
+async fn current_datetime_block() -> impl IntoResponse {
+    CurrentDateTimeBlockTemplate {
+        datetime: Utc::now().format("%Y-%m-%d %H:%M:%S").to_string(),
+    }
+}
+
 #[derive(Template)]
 #[template(path = "index.html")]
-struct IndexTemplate {
-    datetime: String,
-}
+struct IndexTemplate;
 
 #[derive(Template)]
 #[template(path = "current_datetime.html")]
 struct CurrentDateTimeTemplate {
     datetime: String,
-}
+} 
+
+#[derive(Template)]
+#[template(path = "current_datetime_block.html")]
+struct CurrentDateTimeBlockTemplate {
+    datetime: String,
+} 

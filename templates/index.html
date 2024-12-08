@@ -1,11 +1,13 @@
 {% extends "base_page.html" %}
 
-{% block title %}HTMX Test{% endblock %}        
+{% block title %}Home{% endblock %}        
 
 {% block body %}
 <div class="space-y-2">
-    <h1 class="text-2xl font-bold">HTMX Test</h1>
+    <h2 class="text-lg font-bold">Home</h2>
 
-    {% include "current_datetime.html" %}
+    <ol class="list-decimal pl-6">
+        <li><a href="/current_datetime" class="text-sky-500 underline decoration-sky-500">Current Datetime</a></li>
+    </ol>
 </div>
 {% endblock %}

@@ -5,7 +5,13 @@
         <script src="/htmx.min.js"></script>
         <script src="/tailwindcss.min.js"></script>
     </head>
-    <body class="bg-slate-900 text-white font-sans antialiased p-4">
-        {% block body %}{% endblock %}
+    <body class="bg-slate-800 text-slate-50 font-sans antialiased">
+        <div class="space-y-8 p-4">
+            <h1 class="text-2xl font-bold"><a href="/">HTMX Test</a></h1>
+
+            <main id="content">
+                {% block body %}{% endblock %}
+            </main>
+        </div>
     </body>
 </html>
