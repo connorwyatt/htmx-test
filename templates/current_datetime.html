@@ -6,6 +6,10 @@
 <div class="space-y-2">
     <h2 class="text-lg font-bold">Current Datetime</h2>
 
-    {% include "current_datetime_block.html" %}
+    <p id="current_datetime" hx-swap="outerHTML">{% include "current_datetime_block.html" %}</p>
+
+    <button
+        class="rounded-md bg-sky-500 hover:bg-sky-400 px-8 py-1 shadow-md shadow-sky-500/50 hover:shadow-sky-400/50 transition"
+        hx-get="/current_datetime_block" hx-target="#current_datetime">Update</button>
 </div>
 {% endblock %}
