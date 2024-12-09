@@ -1,0 +1,11 @@
+{% if let Some(person) = person %}
+<tbody hx-swap-oob="afterbegin:#people-table-body">
+    <tr class="border-t border-slate-600">
+        <td class="px-8 py-2 text-center">{{ person.id }}</td>
+        <td class="px-8 py-2 text-center">{{ person.name }}</td>
+        <td class="px-8 py-2 text-center">{{ person.date_of_birth.to_string() }}</td>
+        <td class="px-8 py-2 text-center">{{ person.nationality }}</td>
+    </tr>
+</tbody>
+{% endif %}
+{% include "add_person_form_block.html" %}

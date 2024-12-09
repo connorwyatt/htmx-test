@@ -1,0 +1,31 @@
+{% extends "base_page.html" %}
+
+{% block title %}People{% endblock %}
+
+{% block body %}
+<div class="grid grid-cols-[2fr_1fr]">
+    <div class="space-y-4">
+        <h2 class="text-lg font-bold">People</h2>
+
+        <div class="w-max rounded-lg overflow-hidden border border-slate-600">
+            <table class="table-auto border-collapsed">
+                <thead>
+                    <tr>
+                        <th class="px-8 py-2 text-center">ID</th>
+                        <th class="px-8 py-2 text-center">Name</th>
+                        <th class="px-8 py-2 text-center">Date of Birth</th>
+                        <th class="px-8 py-2 text-center">Nationality</th>
+                    </tr>
+                </thead>
+                {% include "people_table_body_block.html" %}
+            </table>
+        </div>
+    </div>
+
+    <div class="space-y-4">
+        <h2 class="text-lg font-bold">Add Person</h2>
+
+        {% include "add_person_form_block.html" %}
+    </div>
+</div>
+{% endblock %}
