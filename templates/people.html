@@ -3,7 +3,7 @@
 {% block title %}People{% endblock %}
 
 {% block body %}
-<div class="grid grid-cols-[2fr_1fr]">
+<div class="grid grid-cols-[1fr_32rem]">
     <div class="space-y-4">
         <h2 class="text-lg font-bold">People</h2>
 
@@ -27,7 +27,7 @@
                         <td class="px-8 py-2 text-center">{{ person.nationality }}</td>
                         <td class="px-8 py-2 text-center">
                             <button type="button" hx-target="#person-{{ person.id }}" hx-swap="outerHTML"
-                                hx-delete="/people/{{ person.id }}"
+                                hx-delete="/people/{{ person.id }}" hx-disabled-elt="this"
                                 class="rounded-md bg-rose-500 hover:bg-rose-400 px-8 py-1 shadow-md shadow-rose-500/50 hover:shadow-rose-400/50 transition">Delete</button>
                         </td>
                     </tr>

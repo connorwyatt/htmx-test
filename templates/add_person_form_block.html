@@ -1,10 +1,11 @@
-<form id="add-person-form" hx-post="/people" class="space-y-8">
+<form id="add-person-form" hx-post="/people" hx-disabled-elt="#add-person-form input, #add-person-form button"
+    class="space-y-8">
     <div class="space-y-4">
         <div>
             <label class="block">
                 <span class="text-sm text-slate-50/75">Name</span>
                 <input name="name" value="{{form_state.values.name}}"
-                    class="block border {% if form_state.errors.name.is_some() %}bg-rose-900 border-rose-600{% else %}bg-slate-700 border-slate-600{% endif %} rounded-md p-2" />
+                    class="block w-full border {% if form_state.errors.name.is_some() %}bg-rose-900 border-rose-600{% else %}bg-slate-700 border-slate-600{% endif %} rounded-md p-2" />
             </label>
             {% if let Some(name_error) = form_state.errors.name %}<p class="text-rose-400">{{name_error}}</p>{% endif %}
         </div>
@@ -13,7 +14,7 @@
             <label class="block">
                 <span class="text-sm text-slate-50/75">Date of Birth</span>
                 <input name="date_of_birth" value="{{form_state.values.date_of_birth}}"
-                    class="block border {% if form_state.errors.date_of_birth.is_some() %}bg-rose-900 border-rose-600{% else %}bg-slate-700 border-slate-600{% endif %} rounded-md p-2" />
+                    class="block w-full border {% if form_state.errors.date_of_birth.is_some() %}bg-rose-900 border-rose-600{% else %}bg-slate-700 border-slate-600{% endif %} rounded-md p-2" />
             </label>
             {% if let Some(date_of_birth_error) = form_state.errors.date_of_birth %}<p class="text-rose-400">
                 {{date_of_birth_error}}</p>{% endif
@@ -24,7 +25,7 @@
             <label class="block">
                 <span class="text-sm text-slate-50/75">Nationality</span>
                 <input name="nationality" value="{{form_state.values.nationality}}"
-                    class="block border {% if form_state.errors.nationality.is_some() %}bg-rose-900 border-rose-600{% else %}bg-slate-700 border-slate-600{% endif %} rounded-md p-2" />
+                    class="block w-full border {% if form_state.errors.nationality.is_some() %}bg-rose-900 border-rose-600{% else %}bg-slate-700 border-slate-600{% endif %} rounded-md p-2" />
             </label>
             {% if let Some(nationality_error) = form_state.errors.nationality %}<p class="text-rose-400">
                 {{nationality_error}}</p>{% endif %}

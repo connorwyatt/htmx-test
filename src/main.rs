@@ -5,6 +5,7 @@ use std::{
     net::SocketAddr,
     str::FromStr,
     sync::{Arc, RwLock},
+    time::Duration,
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use uuid::Uuid;
@@ -16,7 +17,7 @@ use axum::{
     routing::{delete, get},
     Form, Router,
 };
-use tokio::net::TcpListener;
+use tokio::{net::TcpListener, time::sleep};
 use tower_http::services::ServeDir;
 
 #[tokio::main]
@@ -91,17 +92,20 @@ struct PeopleState {
 impl Default for PeopleState {
     fn default() -> Self {
         Self {
-            people: vec![Person {
-                id: Uuid::new_v4().to_string(),
-                name: "John Doe".to_string(),
-                date_of_birth: NaiveDate::from_str("1984-01-01").unwrap(),
-                nationality: "GB".to_string(),
-            }, Person {
-                id: Uuid::new_v4().to_string(),
-                name: "Frankie Smith".to_string(),
-                date_of_birth: NaiveDate::from_str("1963-12-27").unwrap(),
-                nationality: "US".to_string(),
-            }],
+            people: vec![
+                Person {
+                    id: Uuid::new_v4().to_string(),
+                    name: "John Doe".to_string(),
+                    date_of_birth: NaiveDate::from_str("1984-01-01").unwrap(),
+                    nationality: "GB".to_string(),
+                },
+                Person {
+                    id: Uuid::new_v4().to_string(),
+                    name: "Frankie Smith".to_string(),
+                    date_of_birth: NaiveDate::from_str("1963-12-27").unwrap(),
+                    nationality: "US".to_string(),
+                },
+            ],
         }
     }
 }
@@ -184,6 +188,8 @@ async fn add_person(
     State(people_state): State<Arc<RwLock<PeopleState>>>,
     Form(input): Form<AddPersonFormValues>,
 ) -> impl IntoResponse {
+    sleep(Duration::from_secs(3)).await;
+
     let person: Person = match input.clone().try_into() {
         Ok(person) => person,
         Err(errors) => {
@@ -218,6 +224,8 @@ async fn delete_person(
     State(people_state): State<Arc<RwLock<PeopleState>>>,
     Path(person_id): Path<String>,
 ) -> impl IntoResponse {
+    sleep(Duration::from_secs(3)).await;
+
     {
         let people_state_read = people_state.read().unwrap();
         let person = people_state_read.get_person(&person_id);
