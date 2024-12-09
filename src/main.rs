@@ -9,7 +9,13 @@ use std::{
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use uuid::Uuid;
 
-use axum::{extract::State, http::StatusCode, response::IntoResponse, routing::get, Form, Router};
+use axum::{
+    extract::{Path, State},
+    http::StatusCode,
+    response::IntoResponse,
+    routing::{delete, get},
+    Form, Router,
+};
 use tokio::net::TcpListener;
 use tower_http::services::ServeDir;
 
@@ -35,7 +41,7 @@ fn router() -> Router {
         .route("/current_datetime", get(current_datetime))
         .route("/current_datetime_block", get(current_datetime_block))
         .route("/people", get(get_people).post(add_person))
-        .route("/people/table-body", get(get_people_table_body))
+        .route("/people/:id", delete(delete_person))
         .fallback_service(serve_dir)
         .with_state(Arc::new(RwLock::new(PeopleState::default())))
 }
@@ -78,9 +84,26 @@ struct CurrentDateTimeBlockTemplate {
 
 // People
 
-#[derive(Default)]
 struct PeopleState {
     people: Vec<Person>,
+}
+
+impl Default for PeopleState {
+    fn default() -> Self {
+        Self {
+            people: vec![Person {
+                id: Uuid::new_v4().to_string(),
+                name: "John Doe".to_string(),
+                date_of_birth: NaiveDate::from_str("1984-01-01").unwrap(),
+                nationality: "GB".to_string(),
+            }, Person {
+                id: Uuid::new_v4().to_string(),
+                name: "Frankie Smith".to_string(),
+                date_of_birth: NaiveDate::from_str("1963-12-27").unwrap(),
+                nationality: "US".to_string(),
+            }],
+        }
+    }
 }
 
 impl PeopleState {
@@ -88,8 +111,16 @@ impl PeopleState {
         &self.people
     }
 
+    fn get_person(&self, person_id: &str) -> Option<&Person> {
+        self.people.iter().find(|person| person.id == person_id)
+    }
+
     fn add_person(&mut self, person: Person) {
         self.people.insert(0, person)
+    }
+
+    fn delete_person(&mut self, person_id: String) {
+        self.people.retain(|person| person.id != person_id)
     }
 }
 
@@ -183,31 +214,29 @@ async fn add_person(
     )
 }
 
-async fn get_people_table_body(
+async fn delete_person(
     State(people_state): State<Arc<RwLock<PeopleState>>>,
+    Path(person_id): Path<String>,
 ) -> impl IntoResponse {
-    let people_state_read = people_state.read().unwrap();
-    PeopleTableBodyBlockTemplate {
-        people: people_state_read.get_people().to_vec(),
+    {
+        let people_state_read = people_state.read().unwrap();
+        let person = people_state_read.get_person(&person_id);
+
+        if person.is_none() {
+            return StatusCode::NOT_FOUND;
+        }
     }
+
+    let mut people_state_write = people_state.write().unwrap();
+    people_state_write.delete_person(person_id);
+
+    StatusCode::OK
 }
 
 #[derive(Template)]
 #[template(path = "people.html")]
 struct PeopleTemplate {
     people: Vec<Person>,
-    form_state: AddPersonFormState,
-}
-
-#[derive(Template)]
-#[template(path = "people_table_body_block.html")]
-struct PeopleTableBodyBlockTemplate {
-    people: Vec<Person>,
-}
-
-#[derive(Template)]
-#[template(path = "add_person_form_block.html")]
-struct AddPersonFormBlockTemplate {
     form_state: AddPersonFormState,
 }
 
