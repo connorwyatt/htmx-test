@@ -1,6 +1,6 @@
 {% extends "base_page.html" %}
 
-{% block title %}Current Datetime{% endblock %}        
+{% block title %}Current Datetime{% endblock %}
 
 {% block body %}
 <div class="space-y-2">
@@ -10,6 +10,6 @@
 
     <button
         class="rounded-md bg-sky-500 hover:bg-sky-400 px-8 py-1 shadow-md shadow-sky-500/50 hover:shadow-sky-400/50 transition"
-        hx-get="/current_datetime_block" hx-target="#current_datetime">Update</button>
+        hx-get="/current_datetime/block" hx-target="#current_datetime">Update</button>
 </div>
 {% endblock %}
