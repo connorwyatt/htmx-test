@@ -6,9 +6,17 @@
         <td class="px-8 py-2 text-center">{{ person.date_of_birth.to_string() }}</td>
         <td class="px-8 py-2 text-center">{{ person.nationality }}</td>
         <td class="px-8 py-2 text-center">
-            <button type="button" hx-target="#person-{{ person.id }}" hx-swap="outerHTML"
-                hx-delete="/people/{{ person.id }}" hx-disabled-elt="this"
-                class="rounded-md bg-rose-500 hover:bg-rose-400 px-8 py-1 shadow-md shadow-rose-500/50 hover:shadow-rose-400/50 transition">Delete</button>
+            <div class="flex gap-2 items-center">
+                <button type="button" hx-target="#person-{{ person.id }}" hx-swap="outerHTML"
+                    hx-delete="/people/{{ person.id }}" hx-disabled-elt="this"
+                    hx-indicator="#person-spinner-{{ person.id }}"
+                    class="rounded-md bg-rose-500 hover:bg-rose-400 px-8 py-1 shadow-md shadow-rose-500/50 hover:shadow-rose-400/50 transition">
+                    Delete
+                </button>
+                <div id="person-spinner-{{ person.id }}"
+                    class="htmx-indicator inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-solid border-slate-50 border-e-transparent">
+                </div>
+            </div>
         </td>
     </tr>
 </tbody>
