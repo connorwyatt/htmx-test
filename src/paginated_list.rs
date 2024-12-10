@@ -30,10 +30,15 @@ async fn get_paginated_list() -> impl IntoResponse {
 async fn get_paginated_list_items(
     Query(query_params): Query<PaginationQueryParameters>,
 ) -> impl IntoResponse {
-    let offset = query_params.offset.unwrap_or(0);
     let ids: Vec<_> = (0..PAGE_SIZE).map(|_| Uuid::new_v4().to_string()).collect();
+    let offset = query_params.offset.unwrap_or(0);
+    let new_offset = offset + ids.len();
     PaginatedListItemsTemplate {
-        offset: Some(offset + ids.len()),
+        offset: if new_offset < 500 {
+            Some(new_offset)
+        } else {
+            None
+        },
         ids,
     }
 }
