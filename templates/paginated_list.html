@@ -1,0 +1,13 @@
+{% extends "base_page.html" %}
+
+{% block title %}Paginated List{% endblock %}
+
+{% block body %}
+<div class="space-y-4">
+    <h2 class="text-lg font-bold">Paginated List</h2>
+
+    <ul id="list" class="w-full grid grid-flow-row grid-cols-[repeat(auto-fill,minmax(16rem,_1fr))] gap-4">
+        {% include "paginated_list_items.html" %}
+    </ul>
+</div>
+{% endblock %}

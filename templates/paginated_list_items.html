@@ -1,0 +1,8 @@
+{% for id in ids %}
+<li {% if offset.is_some() && loop.first %}hx-get="/paginated_list/items?offset={{ offset.unwrap() }}"
+    hx-trigger="revealed" hx-target="#list" hx-swap="beforeend" {% endif
+    %}class="rounded-lg overflow-hidden border border-slate-600">
+    <image src="https://picsum.photos/seed/{{ id }}/360/270" class="w-full aspect-[4/3]" />
+    <div class="border-t border-slate-600 p-4">{{ id }}</div>
+</li>
+{% endfor %}

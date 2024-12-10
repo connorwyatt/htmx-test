@@ -17,6 +17,7 @@ pub(crate) fn people_router() -> Router<AppState> {
         .route("/", get(get_people).post(add_person))
         .route("/:id", delete(delete_person))
 }
+
 #[derive(Clone)]
 pub(crate) struct PeopleState {
     people: Vec<Person>,

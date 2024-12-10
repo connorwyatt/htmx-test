@@ -1,5 +1,6 @@
 use askama_axum::Template;
 use current_datetime::current_datetime_router;
+use paginated_list::paginated_list_router;
 use people::{people_router, PeopleState};
 use std::{
     net::SocketAddr,
@@ -16,6 +17,7 @@ use tokio::net::TcpListener;
 use tower_http::services::ServeDir;
 
 pub(crate) mod current_datetime;
+pub(crate) mod paginated_list;
 pub(crate) mod people;
 
 #[tokio::main]
@@ -50,6 +52,7 @@ fn router() -> Router<AppState> {
     Router::new()
         .route("/", get(index))
         .nest("/current_datetime", current_datetime_router())
+        .nest("/paginated_list", paginated_list_router())
         .nest("/people", people_router())
         .fallback_service(serve_dir)
 }
